@@ -104,3 +104,19 @@ const filmy = [
 		premiera: '2022-12-24',
 	},
 ]
+
+const detailFilmu = document.querySelector('#detail-filmu');
+const oFilmu = window.location.hash.slice(1);
+const film = filmy.find((film) => film.id === oFilmu);
+
+const plakat = document.createElement('img');
+plakat.src = film.plakat.url;
+
+
+if (film && detailFilmu) {
+  detailFilmu.querySelector('.card-img-top').src = film.plakat.url;
+  detailFilmu.querySelector('.card-img-top').alt = film.nazev;
+  detailFilmu.querySelector('.card-title').textContent = film.nazev;
+  detailFilmu.querySelector('.card-text').textContent = film.popis;
+  detailFilmu.querySelector('#premiera strong').textContent = film.premiera;
+}
