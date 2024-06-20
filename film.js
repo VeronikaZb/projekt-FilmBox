@@ -105,84 +105,76 @@ const filmy = [
 	},
 ]
 
+//informace o filmu
 const detailFilmu = document.querySelector('#detail-filmu');
 const oFilmu = window.location.hash.slice(1);
 const film = filmy.find((film) => film.id === oFilmu);
 
-
-  detailFilmu.innerHTML += `
-  <div class="row g-0">
-            <div class="col-md-5">
-                <img
-                    src="${film.plakat.url}"
-                    class="img-fluid rounded-start"
-                    width="${film.plakat.sirka}"
-                    height="${film.plakat.vyska}"
-                    alt="${film.nazev}"
-                />
-            </div>
-            <div class="col-md-7">
-                <div class="card-body">
-                    <h5 class="card-title">${film.nazev}</h5>
-                    <p class="card-text">${film.popis}</p>
-                    <p class="card-text">
-                        <small class="text-muted" id="premiera">Premiéra <strong>${film.premiera}</strong></small>
-                    </p>
-                    <h6>Hodnocení</h6>
-                    <div class="stars">
-                        <button class="far fa-star button-star" data-mdb-toggle="tooltip" title="Nic moc">1</button>
-                        <button class="far fa-star button-star" data-mdb-toggle="tooltip" title="Ucházející">2</button>
-                        <button class="far fa-star button-star" data-mdb-toggle="tooltip" title="Dobrý">3</button>
-                        <button class="far fa-star button-star" data-mdb-toggle="tooltip" title="Skvělý">4</button>
-                        <button class="far fa-star button-star" data-mdb-toggle="tooltip" title="Úžasný">5</button>
-                    </div>
-                    <h6 class="mt-4">Poznámka</h6>
-                    <form id="note-form">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-7 col-xl-8 mb-2">
-                                <div class="form-outline">
-                                    <textarea class="form-control" id="message-input" rows="4"></textarea>
-                                    <label class="form-label" for="message-input">Text poznámky</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-5 col-xl-4">
-                                <div class="form-check d-flex justify-content-center mb-2">
-                                    <input class="form-check-input me-2 mb-2" type="checkbox" value="" id="terms-checkbox" />
-                                    <label class="form-check-label" for="terms-checkbox">Souhlasím se všeobecnými podmínky užívání.</label>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Uložit</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    `;
+detailFilmu.querySelector('.img-fluid').src = film.plakat.url;
+detailFilmu.querySelector('.card-title').textContent = film.nazev;
+detailFilmu.querySelector('.card-text').textContent = film.popis;
+detailFilmu.querySelector('#premiera strong').textContent = film.premiera;
 
 
-	const formular = document.querySelector('#note-form');
-	const vstupText = document.querySelector('#message-input');
-	const checkboxSouhlas = document.querySelector('#terms-checkbox');
+//poznámka k filmu
+const formular = document.querySelector('#note-form');
+const vstupText = document.querySelector('#message-input');
+const checkboxSouhlas = document.querySelector('#terms-checkbox');
 	
-	formular.addEventListener('submit', function (event) {
-		event.preventDefault();
-		if (vstupText.value.trim() === '') {
-			vstupText.classList.add('is-invalid');
-			vstupText.focus();
-			return;
-		} else {
-			vstupText.classList.remove('is-invalid');
-		}
-		if (!checkboxSouhlas.checked) {
-			checkboxSouhlas.classList.add('is-invalid');
-			checkboxSouhlas.focus();
-			return;
-		} else {
-			checkboxSouhlas.classList.remove('is-invalid');
-		}
+formular.addEventListener('submit', function (event) {
+	event.preventDefault();
+	if (vstupText.value.trim() === '') {
+		vstupText.classList.add('is-invalid');
+		vstupText.focus();
+		return;
+	} else {
+		vstupText.classList.remove('is-invalid');
+	}
+	if (!checkboxSouhlas.checked) {
+		checkboxSouhlas.classList.add('is-invalid');
+		checkboxSouhlas.focus();
+		return;
+	} else {
+		checkboxSouhlas.classList.remove('is-invalid');
+	}
 	
-		const textObsah = vstupText.value.trim();
-		const novyObsah = `<p class="card-text">${textObsah}</p>`;
-		formular.innerHTML = novyObsah;
-	});
+const textObsah = vstupText.value.trim();
+const novyObsah = `<p class="card-text">${textObsah}</p>`;
+formular.innerHTML = novyObsah;
+});
   
+
+//hvězdičky 
+let currentRating = 0; 
+
+function highlightStars(rating) {
+	const stars = document.querySelectorAll('.button-star');
+	stars.forEach((star, index) => {
+		if (index < rating) {
+			star.classList.remove('far');
+			star.classList.add('fas');
+		} else {
+			star.classList.remove('fas');
+			star.classList.add('far');
+		}
+	});
+}
+	
+const stars = document.querySelectorAll('.button-star');
+stars.forEach(star => {
+	star.addEventListener('click', function () {
+
+const rating = parseInt(this.textContent);
+	currentRating = rating; 
+	highlightStars(rating);
+});
+	
+star.addEventListener('mouseenter', function () {
+const rating = parseInt(this.textContent);
+	highlightStars(rating);
+});
+	
+star.addEventListener('mouseleave', function () {
+	highlightStars(currentRating);
+	});
+});
