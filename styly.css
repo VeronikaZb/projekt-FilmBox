@@ -115,3 +115,10 @@ video[controls] + .player-controls {
 .form-control.is-invalid {
 	margin-bottom: 0;
 }
+
+#note-form {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
